@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Airtel · Financial & Demand Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f3f4f7;--card:#fff;--ink:#1b1215;--mut:#6b6266;--line:#e4e1e3;--red:#e40000;--teal:#0b8a82;--amb:#f2a516;--vio:#6a4fd8}
+[data-theme=dark]{--bg:#120a0b;--card:#1d1214;--ink:#f6eeee;--mut:#a79a9d;--line:#33252a;--red:#ff3b3b;--teal:#2fd0c4;--amb:#ffc247;--vio:#9d86ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Sora,system-ui,sans-serif;transition:background .4s,color .4s}
+header{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:12px 24px;background:var(--card);border-bottom:3px solid var(--red)}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}.brand b{font-size:18px;display:block;line-height:1.1}.brand small{color:var(--mut)}
+select,button{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 10px;cursor:pointer}
+select:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+button:hover{border-color:var(--red)}label{display:flex;flex-direction:column;font-size:11px;color:var(--mut);gap:2px}
+main{max-width:1280px;margin:auto;padding:20px 24px 60px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;transition:transform .25s,border-color .25s}
+.card:hover{border-color:var(--red)}
+.kpi .v{font-size:28px;font-weight:800}.kpi .l{color:var(--mut);font-size:12px}.up{color:var(--teal)}.dn{color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:14px}
+.c7{grid-column:span 7}.c5{grid-column:span 5}.c6{grid-column:span 6}.c12{grid-column:span 12}
+@media(max-width:900px){.c7,.c5,.c6{grid-column:span 12}}
+h2{font-size:15px;margin:0 0 10px}.box{position:relative;height:290px}
+table{width:100%;border-collapse:collapse}th,td{padding:7px 6px;text-align:right;border-bottom:1px solid var(--line)}th:first-child,td:first-child{text-align:left}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;background:var(--red);color:#fff;font-size:11px}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:10px}
+input[type=range]{width:100%;accent-color:var(--red)}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.mini div{background:var(--bg);border-radius:8px;padding:10px;transition:transform .3s}.mini b{font-size:18px;display:block}
+.note{color:var(--mut);font-size:12px}ul{margin:6px 0 0;padding-left:18px}li{margin:4px 0}
+#intro{position:fixed;inset:0;z-index:99;background:#e40000;display:grid;place-items:center;color:#fff;text-align:center;cursor:pointer;transition:opacity .7s,visibility .7s}
+#intro.gone{opacity:0;visibility:hidden}
+#intro svg{width:150px;animation:pop 1.1s cubic-bezier(.2,1.4,.4,1) both}
+#intro h1{margin:14px 0 4px;font-size:42px;letter-spacing:2px;animation:rise .9s .7s both}#intro p{margin:0;animation:rise .9s 1.1s both;opacity:.9}
+.ring{position:absolute;width:150px;height:150px;border:2px solid #fff;border-radius:50%;animation:ring 2.2s ease-out infinite;opacity:0}.ring:nth-child(2){animation-delay:.7s}.ring:nth-child(3){animation-delay:1.4s}
+@keyframes pop{from{transform:scale(0) rotate(-180deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes rise{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:.95}}
+@keyframes ring{0%{transform:scale(1);opacity:.7}100%{transform:scale(5);opacity:0}}
+.flash{animation:fl .6s}@keyframes fl{0%{transform:scale(1.06)}100%{transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition:none!important}}
+</style></head><body>
+<div id="intro"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div>
+<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#fff"/><text x="50" y="72" text-anchor="middle" font-size="78" font-weight="800" fill="#e40000" font-family="Sora,Arial">a</text></svg>
+<h1>airtel</h1><p>Financial &amp; demand analytics · India and Africa</p></div></div>
+
+<header>
+<div class="brand"><span id="logo"><svg width="46" height="46" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#e40000"/><text x="50" y="72" text-anchor="middle" font-size="78" font-weight="800" fill="#fff" font-family="Sora,Arial">a</text></svg></span>
+<div><b style="color:var(--red)">airtel</b><small>Financial &amp; demand analytics</small></div></div>
+<label>Region<select id="reg"><option>Consolidated</option><option selected>India</option><option>Africa</option></select></label>
+<label>State / circle (India)<select id="st"></select></label>
+<label>Financial year<select id="yr"></select></label>
+<button id="live" title="Refresh data">⟳ Refresh</button><button id="snd">🔊 Sound on</button><button id="thm">🌙 Dark</button>
+</header>
+
+<main>
+<div class="kpis" id="kpis"></div>
+<div class="grid">
+<div class="card c7"><h2>Financial performance trend (₹ crore)</h2><div class="box"><canvas id="c1"></canvas></div></div>
+<div class="card c5"><h2>Revenue mix by service</h2><div class="box"><canvas id="c2"></canvas></div></div>
+<div class="card c6"><h2>Customer base (million)</h2><div class="box"><canvas id="c3"></canvas></div></div>
+<div class="card c6"><h2>Product / service revenue, selected year</h2><div class="box"><canvas id="c4"></canvas></div></div>
+<div class="card c12"><h2>Product table with year-on-year growth</h2><table id="tb"></table></div>
+
+<div class="card c12"><h2>Law of demand &amp; price elasticity <span class="pill">simulator</span></h2>
+<div class="ctl">
+<label>Product<select id="pr"></select></label>
+<label>Price change: <b id="pv">0%</b><input type="range" id="ps" min="-30" max="60" value="0"></label>
+<label>Demand shift (income, competition): <b id="sv">0%</b><input type="range" id="ss" min="-30" max="30" value="0"></label>
+</div>
+<div class="grid" style="margin:0"><div class="c7"><div class="box" style="height:340px"><canvas id="c5"></canvas></div></div>
+<div class="c5"><p class="note">The curve slopes downward: as price rises, quantity demanded falls (law of demand). Changing the price moves the point <i>along</i> the curve and the curve itself stays put. Only the shift slider moves the whole curve.</p>
+<div class="mini" id="dm"></div><ul id="ins"></ul></div></div></div>
+
+<div class="card c12"><h2>Key insights</h2><ul id="ins2"></ul>
+<p class="note" id="src"></p></div>
+</div></main>
+
+<script>
+/* ---------- DATA (₹ crore unless stated; approximate figures from Bharti Airtel annual reports / investor results) ---------- */
+const LOGO_URL="";            // paste the official Airtel logo image URL here
+const DATA_URL="";            // optional: JSON endpoint {rev:[],ebitda:[],pat:[],cust:[]} for live refresh
+const Y=['FY20','FY21','FY22','FY23','FY24','FY25','FY26E','FY27E'];
+const D={rev:[85000,100616,116547,139145,149982,172985,197000,222000],
+ebitda:[36000,48000,60000,71000,80000,99000,115000,131000],
+pat:[-32183,-15084,4255,7467,4574,33556,21000,27000],
+cust:[435,472,503,530,563,595,625,655]};
+const SH={India:{rev:[.70,.69,.69,.69,.69,.69,.69,.69],cu:.62,pf:1.15},Africa:{rev:[.22,.23,.24,.25,.26,.255,.26,.26],cu:.27,pf:.5},Consolidated:{rev:Array(8).fill(1),cu:1,pf:1}};
+const ST={'All India':[1,1],'Maharashtra & Goa':[.09,1.3],'Delhi NCR':[.09,1.5],'Karnataka':[.08,1.5],'Tamil Nadu':[.07,1.2],'Uttar Pradesh':[.11,.7],'Punjab':[.06,1],'Andhra Pradesh & Telangana':[.09,1.2],'West Bengal':[.06,1],'Gujarat':[.06,1.1],'Kerala':[.04,.9],'Other circles':[.25,.8]};
+const MIX={India:{n:['Mobile (pre/postpaid)','Homes (Xstream Fiber)','Airtel Business','Digital TV','Black & digital'],a:[78,4,12,3,3],b:[68,8,14,2,8]},
+Africa:{n:['Mobile voice','Mobile data','Airtel Money','Other'],a:[46,32,12,10],b:[30,40,24,6]},
+Consolidated:{n:['India mobile','Africa mobile','Airtel Business','Homes & DTH','Money & other'],a:[52,17,11,6,14],b:[46,17,13,8,16]}};
+const PROD={India:[{n:'Prepaid plan',p:299,e:.6,s:.9,c:'₹'},{n:'Postpaid plan',p:499,e:.9,s:.1,c:'₹'},{n:'Xstream Fiber',p:799,e:1.3,s:.03,c:'₹'},{n:'Digital TV',p:350,e:1.5,s:.04,c:'₹'},{n:'Airtel Black bundle',p:1099,e:.8,s:.01,c:'₹'}],
+Africa:[{n:'Data bundle',p:3,e:1.2,s:.6,c:'$'},{n:'Voice bundle',p:2,e:.7,s:.8,c:'$'},{n:'Airtel Money fee',p:1,e:1.1,s:.35,c:'$'}]};
+const COL=['#e40000','#0b8a82','#f2a516','#6a4fd8','#2f7de1'];
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);let yi=5,charts={},muted=false,ac;
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const fm=v=>(v<0?'-':'')+'₹'+(Math.abs(v)>=1e5?(Math.abs(v)/1e5).toFixed(2)+' L cr':Math.round(Math.abs(v)).toLocaleString('en-IN')+' cr');
+function beep(f=520,d=.09,t='sine'){if(muted)return;try{ac=ac||new AudioContext();const o=ac.createOscillator(),g=ac.createGain();o.type=t;o.frequency.value=f;g.gain.value=.06;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d);o.stop(ac.currentTime+d)}catch(e){}}
+function mix(r,i){const m=MIX[r],t=i/7;let v=m.a.map((x,k)=>x+(m.b[k]-x)*t);if(r==='India'){const b=ST[$('st').value][1],h=v[1]*(b-1);v[1]+=h;v[0]-=h}const s=v.reduce((a,b)=>a+b);return v.map(x=>x/s)}
+function scope(i){const r=$('reg').value,S=SH[r],k=r==='India'?ST[$('st').value][0]:1,rv=D.rev[i]*S.rev[i]*k;
+return{r,k,rev:rv,ebitda:D.ebitda[i]*S.rev[i]*k*(r==='Africa'?1.05:1),pat:D.pat[i]*S.rev[i]*k,cust:D.cust[i]*S.cu*k}}
+function count(el,to,f){const a=+el.dataset.v||0;el.dataset.v=to;const t0=performance.now();(function s(n){const p=Math.min(1,(n-t0)/700),e=1-Math.pow(1-p,3);el.textContent=f(a+(to-a)*e);if(p<1)requestAnimationFrame(s)})(t0)}
+/* ---------- init ---------- */
+Y.forEach((y,i)=>$('yr').add(new Option(y+(y.endsWith('E')?' (expected)':''),i)));$('yr').value=5;
+Object.keys(ST).forEach(s=>$('st').add(new Option(s)));
+if(LOGO_URL)$('logo').innerHTML='<img src="'+LOGO_URL+'" height="46" alt="Airtel">';
+const tick={color:css('--mut')};
+function mk(id,cfg){charts[id]=new Chart($(id),cfg)}
+Chart.defaults.font.family='Sora,system-ui';Chart.defaults.maintainAspectRatio=false;Chart.defaults.animation.duration=900;
+mk('c1',{data:{labels:Y,datasets:[{type:'bar',label:'Revenue',data:[],backgroundColor:[]},{type:'bar',label:'EBITDA',data:[],backgroundColor:COL[1]},{type:'line',label:'Net profit',data:[],borderColor:COL[2],backgroundColor:COL[2],tension:.3}]}});
+mk('c2',{type:'doughnut',data:{labels:[],datasets:[{data:[],backgroundColor:COL,borderWidth:0}]},options:{cutout:'62%',plugins:{legend:{position:'bottom'}}}});
+mk('c3',{type:'line',data:{labels:Y,datasets:[{label:'Customers (mn)',data:[],borderColor:COL[0],backgroundColor:'#e4000030',fill:true,tension:.35,pointRadius:[]}]}});
+mk('c4',{type:'bar',data:{labels:[],datasets:[{label:'Revenue',data:[],backgroundColor:COL}]},options:{indexAxis:'y',plugins:{legend:{display:false}}}});
+mk('c5',{type:'line',data:{datasets:[]},options:{parsing:false,scales:{x:{type:'linear',title:{display:true,text:'Quantity demanded (million subscribers)'}},y:{title:{display:true,text:'Price'}}},plugins:{tooltip:{enabled:true}}}});
+/* ---------- main update ---------- */
+function update(){
+yi=+$('yr').value;const S=scope(yi),P=scope(Math.max(0,yi-1)),r=S.r;
+$('st').disabled=r!=='India';
+const kp=[['Revenue',S.rev,P.rev,fm],['EBITDA',S.ebitda,P.ebitda,fm],['Net profit',S.pat,P.pat,fm],['Customers',S.cust,P.cust,v=>v.toFixed(1)+' mn']];
+$('kpis').innerHTML=kp.map((k,i)=>{const g=k[2]?((k[1]-k[2])/Math.abs(k[2])*100):0;return`<div class="card kpi flash"><div class="l">${k[0]} · ${Y[yi]}</div><div class="v" id="k${i}">0</div><div class="${g>=0?'up':'dn'}">${yi?(g>=0?'▲ ':'▼ ')+Math.abs(g).toFixed(1)+'% YoY':'base year'}</div></div>`}).join('');
+kp.forEach((k,i)=>count($('k'+i),k[1],k[3]));
+const sc=i=>scope(i),all=Y.map((_,i)=>sc(i)),c1=charts.c1;
+c1.data.datasets[0].data=all.map(a=>a.rev);c1.data.datasets[0].backgroundColor=Y.map((_,i)=>i===yi?COL[0]:'#e4000055');
+c1.data.datasets[1].data=all.map(a=>a.ebitda);c1.data.datasets[2].data=all.map(a=>a.pat);
+c1.options.scales={x:{ticks:{color:css('--mut')}},y:{ticks:{color:css('--mut')},grid:{color:css('--line')}}};c1.update();
+const m=mix(r,yi),mm=MIX[r];charts.c2.data.labels=mm.n;charts.c2.data.datasets[0].data=m.map(x=>+(x*100).toFixed(1));charts.c2.update();
+charts.c3.data.datasets[0].data=all.map(a=>+a.cust.toFixed(1));charts.c3.data.datasets[0].pointRadius=Y.map((_,i)=>i===yi?8:3);charts.c3.update();
+const pr=m.map(x=>x*S.rev),pp=mix(r,Math.max(0,yi-1)).map(x=>x*P.rev);
+charts.c4.data.labels=mm.n;charts.c4.data.datasets[0].data=pr;charts.c4.update();
+$('tb').innerHTML='<tr><th>Service</th><th>Revenue</th><th>Share</th><th>YoY</th></tr>'+mm.n.map((n,i)=>{const g=yi?(pr[i]-pp[i])/pp[i]*100:0;return`<tr><td>${n}</td><td>${fm(pr[i])}</td><td>${(m[i]*100).toFixed(1)}%</td><td class="${g>=0?'up':'dn'}">${yi?g.toFixed(1)+'%':'–'}</td></tr>`}).join('');
+const top=pr.indexOf(Math.max(...pr)),gr=yi?((S.rev-P.rev)/P.rev*100):0,mg=S.ebitda/S.rev*100;
+const loc=r==='India'?$('st').value:r;
+$('ins2').innerHTML=`<li>${loc}: revenue ${fm(S.rev)} in ${Y[yi]}${yi?', up '+gr.toFixed(1)+'% on the previous year':''}.</li><li>EBITDA margin is ${mg.toFixed(1)}%, the strongest-earning line is ${mm.n[top]}.</li><li>${S.pat<0?'Net loss reflects AGR (licence-fee dues) charges in FY20–21.':'Net profit is positive; FY25 includes a one-off exceptional tax gain, so compare EBITDA for the underlying trend.'}</li><li>Customer base: ${S.cust.toFixed(0)} mn; the Homes and Airtel Money lines are gaining share while plain mobile voice loses share.</li>`;
+$('src').innerHTML='Sources: Bharti Airtel investor relations (airtel.in/about-bharti/investor-relations) · Annual reports · TRAI subscriber reports (trai.gov.in). Figures are rounded approximations; FY26E–FY27E are model estimates; state and product splits are modelled, since Airtel reports them only in aggregate. Verify against official filings before formal use. Last refreshed: '+new Date().toLocaleString();
+demandProducts();demand();}
+function demandProducts(){const r=$('reg').value==='Africa'?'Africa':'India',cur=$('pr').dataset.r;if(cur!==r){$('pr').innerHTML='';PROD[r].forEach((p,i)=>$('pr').add(new Option(p.n,i)));$('pr').dataset.r=r}}
+function demand(){
+const r=$('reg').value==='Africa'?'Africa':'India',p=PROD[r][+$('pr').value||0],S=scope(yi),dp=+$('ps').value/100,sh=1+$('ss').value/100;
+$('pv').textContent=(dp>=0?'+':'')+(dp*100).toFixed(0)+'%';$('sv').textContent=($('ss').value>=0?'+':'')+$('ss').value+'%';
+const Q0=S.cust*p.s*(r==='Africa'&&S.r!=='Africa'?0:1)||S.cust*p.s,pf=(P0,k,P)=>Q0*k*Math.pow(P/P0,-p.e);
+const pts=k=>{const a=[];for(let i=0;i<=40;i++){const P=p.p*(.5+i*.0275);a.push({x:pf(p.p,k,P),y:P})}return a};
+const Pn=p.p*(1+dp),Qn=pf(p.p,sh,Pn),Qb=Q0,dq=(Qn/Qb-1)*100,rf=(Pn*Qn)/(p.p*Qb)-1;
+const col=ctx=>{const y=ctx.p1.parsed.y/p.p;return y<.85?COL[1]:y<1.15?COL[2]:y<1.4?'#f06a1a':COL[0]};
+charts.c5.data.datasets=[{label:'Current demand curve',data:pts(sh),borderWidth:4,tension:.3,pointRadius:0,segment:{borderColor:col}},
+{label:'Original curve',data:pts(1),borderColor:'#8884',borderDash:[6,5],pointRadius:0,borderWidth:2},
+{label:'Original price',data:[{x:Qb,y:p.p}],showLine:false,pointRadius:7,pointStyle:'rectRot',borderColor:COL[3],backgroundColor:'transparent',borderWidth:3},
+{label:'New price point',data:[{x:Qn,y:Pn}],showLine:false,pointRadius:11,backgroundColor:COL[0],borderColor:'#fff',borderWidth:3}];
+charts.c5.options.scales.y.title.text='Price ('+p.c+')';charts.c5.update();
+const el=p.e>1?'Elastic (|e|>1)':p.e<1?'Inelastic (|e|<1)':'Unit elastic';
+$('dm').innerHTML=`<div><small>Price elasticity</small><b>−${p.e.toFixed(1)}</b>${el}</div><div><small>New price</small><b>${p.c}${Pn.toFixed(0)}</b>was ${p.c}${p.p}</div><div><small>Quantity demanded</small><b class="${dq>=0?'up':'dn'}">${dq.toFixed(1)}%</b>${Qn.toFixed(1)} mn</div><div><small>Revenue effect</small><b class="${rf>=0?'up':'dn'}">${(rf*100).toFixed(1)}%</b>${fm(S.rev*(MIX[S.r==='Africa'?'Africa':S.r][0]?mix(S.r,yi)[0]:0)*rf)} on mobile base</div>`;
+$('ins').innerHTML=`<li>${dp>0?(p.e>1?'A price rise cuts demand by more than it lifts price, so revenue falls.':'Demand is inelastic here, so a price rise increases revenue even though subscribers fall.'):dp<0?(p.e>1?'Elastic demand: a price cut gains enough subscribers to raise revenue.':'Inelastic demand: a price cut loses revenue.'):'Move the price slider to see the effect.'}</li><li>Price changes slide the point along the curve; the shift slider moves the curve.</li>`;}
+/* ---------- events ---------- */
+['reg','st','yr'].forEach(i=>$(i).onchange=()=>{beep(i==='yr'?660:520);update()});
+$('pr').onchange=()=>{beep(440);demand()};
+let last=0;['ps','ss'].forEach(i=>$(i).oninput=()=>{const n=Date.now();if(n-last>70){beep(300+(+$(i).value)*4,.05,'triangle');last=n}demand()});
+$('thm').onclick=()=>{const d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'light':'dark';$('thm').textContent=d?'🌙 Dark':'☀️ Light';Chart.defaults.color=css('--mut');beep(d?700:400);update()};
+$('snd').onclick=()=>{muted=!muted;$('snd').textContent=muted?'🔇 Sound off':'🔊 Sound on';beep(600)};
+$('live').onclick=async()=>{beep(800,.15);if(DATA_URL){try{Object.assign(D,await (await fetch(DATA_URL)).json())}catch(e){alert('Live feed unreachable; showing built-in data.')}}update()};
+$('intro').onclick=()=>{$('intro').classList.add('gone');beep(880,.2)};
+setTimeout(()=>$('intro').classList.add('gone'),3600);
+Chart.defaults.color=css('--mut');update();
+</script></body></html>
